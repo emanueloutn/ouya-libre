@@ -51,7 +51,11 @@ Se agradecen correcciones, conectores de fuentes públicas y pruebas en hardware
 
 ## Apoyar el desarrollo
 
-El proyecto acepta apoyo voluntario para mantenimiento y pruebas. También puedes contribuir con código, documentación o informes de errores. El enlace para donaciones se añadirá cuando el mantenedor lo configure; la app seguirá funcionando sin donar.
+Si OuyaLibre te resulta útil, puedes apoyar voluntariamente su mantenimiento y las pruebas en hardware real.
+
+[**Apoyar OuyaLibre con PayPal**](https://paypal.me/EnmanuelFYepez)
+
+La aplicación sigue siendo gratuita y no requiere donar. También puedes contribuir con código, documentación o informes de errores.
 
 ## Licencias
 
