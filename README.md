@@ -53,6 +53,8 @@ Se agradecen correcciones, conectores de fuentes públicas y pruebas en hardware
 
 Si OuyaLibre te resulta útil, puedes apoyar voluntariamente su mantenimiento y las pruebas en hardware real.
 
+[**Apoyar OuyaLibre con Ko-fi**](https://ko-fi.com/enmanuelyepez)
+
 [**Apoyar OuyaLibre con PayPal**](https://paypal.me/EnmanuelFYepez)
 
 La aplicación sigue siendo gratuita y no requiere donar. También puedes contribuir con código, documentación o informes de errores.
