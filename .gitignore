@@ -1,0 +1,8 @@
+build/
+signing/
+*.keystore
+*.jks
+*.idsig
+local.properties
+.env
+.DS_Store

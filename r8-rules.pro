@@ -1,0 +1,12 @@
+-keep class org.ouyalibre.tv.** { *; }
+-dontobfuscate
+-dontwarn javax.naming.**
+-dontwarn javax.security.sasl.**
+-dontwarn java.lang.management.**
+-dontwarn java.security.cert.PKIXRevocationChecker
+-dontwarn java.security.cert.PKIXRevocationChecker$**
+-dontwarn java.nio.file.**
+-dontwarn javax.net.ssl.X509ExtendedTrustManager
+-dontwarn javax.net.ssl.X509ExtendedKeyManager
+-dontwarn java.lang.invoke.**
+-dontwarn java.lang.ClassValue
