@@ -11,3 +11,5 @@ Probado el 6 de noviembre de 2026 en OUYA Console, Android 4.1.2/API 16, ARMv7, 
 - La búsqueda general encontró páginas de distintos sitios en la PC, pero recibió límites del buscador desde la consola. No se presenta esa parte como universalmente operativa.
 
 `tests/CoreTest.java` contiene comprobaciones locales del transporte y consultas opcionales de proveedores con `--online`. Las pruebas de hardware no garantizan compatibilidad con todos los archivos ni fuentes futuras.
+
+Actualización 0.6.1 (11 de noviembre de 2026): el icono aparece en MAKE → Software después de actualizar la APK. Se verificó arranque desde el icono con U, conservando datos y firma. Solo cambia el manifiesto; no se repitieron pruebas multimedia porque DEX, recursos y dependencias permanecen idénticos a 0.6.

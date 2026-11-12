@@ -37,9 +37,10 @@ CheckExit
 $key = Join-Path $root 'signing\prototype.keystore'
 New-Item -ItemType Directory -Force (Join-Path $root 'signing') | Out-Null
 if (!(Test-Path $key)) { & "$Jdk\bin\keytool.exe" -genkeypair -keystore $key -storepass android -keypass android -alias ouyalibre -keyalg RSA -keysize 2048 -validity 10000 -dname 'CN=OUYA Libre Prototype'; CheckExit }
-$apk = Join-Path $build 'OuyaLibre-0.6.apk'
+$apk = Join-Path $build 'OuyaLibre-0.6.1.apk'
 & "$Jdk\bin\java.exe" -jar "$bt\lib\apksigner.jar" sign --ks $key --ks-pass pass:android --key-pass pass:android --v1-signing-enabled true --v2-signing-enabled true --out $apk $aligned
 CheckExit
 & "$Jdk\bin\java.exe" -jar "$bt\lib\apksigner.jar" verify --verbose --min-sdk-version 16 $apk
 CheckExit
 Write-Output "APK creada: $apk"
+

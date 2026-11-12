@@ -2,7 +2,7 @@
 
 Reproductor y buscador de vídeos públicos para **OUYA con Android 4.1 / API 16**. Aplicación nativa, controlable con el mando, sin publicidad propia ni suscripciones. Funciona en la consola sin una computadora encendida.
 
-**Versión 0.6: prototipo experimental probado en una OUYA real.**
+**Versión 0.6.1: prototipo experimental probado en una OUYA real.**
 
 ## Qué incluye
 
@@ -17,7 +17,7 @@ Reproductor y buscador de vídeos públicos para **OUYA con Android 4.1 / API 16
 
 ## Descargar e instalar
 
-Busca la APK **OuyaLibre-0.6.apk** en las publicaciones de este repositorio. Transfiérela a tu OUYA e instálala. Solo solicita permiso de acceso a Internet.
+Busca la APK **OuyaLibre-0.6.1.apk** en las publicaciones de este repositorio. Transfiérela a tu OUYA e instálala. El acceso aparece en **MAKE → Software**. Esta versión corrige la categoría del menú de la APK anterior y se instala encima conservando los datos cuando la firma coincide. Solo solicita permiso de acceso a Internet.
 
 Con mando: cruceta para navegar, **O** para aceptar, **A** para volver y **U** para reproducir/pausar. La app incluye teclado para títulos y enlaces.
 
@@ -39,7 +39,7 @@ Requiere JDK 17 o 21, Android SDK Platform 35 y Build Tools 35.0.0. Configura `J
 .\build.ps1 -Sdk 'RUTA_AL_ANDROID_SDK' -Jdk 'RUTA_AL_JDK'
 ```
 
-La salida será `build/OuyaLibre-0.6.apk`. La primera compilación genera una clave local en `signing/`, excluida de Git. La clave de firma de la publicación no está en el repositorio; una APK compilada con otra clave no puede actualizar directamente la APK publicada.
+La salida será `build/OuyaLibre-0.6.1.apk`. La primera compilación genera una clave local en `signing/`, excluida de Git. La clave de firma de la publicación no está en el repositorio; una APK compilada con otra clave no puede actualizar directamente la APK publicada.
 
 No se necesita Gradle ni descargar dependencias para esta compilación: la biblioteca TLS reubicada y los certificados públicos están incluidos.
 
@@ -62,3 +62,5 @@ La aplicación sigue siendo gratuita y no requiere donar. También puedes contri
 ## Licencias
 
 Código del proyecto bajo [MIT](LICENSE). Las dependencias conservan sus propias licencias: consulta [THIRD-PARTY.md](THIRD-PARTY.md), Bouncy Castle y el conjunto de certificados Mozilla incluido.
+
+
