@@ -1,3 +1,7 @@
+> **Known visual playback regression in v0.8.1:** some IPTV channels and videos can play audio with a black picture, briefly revealing video when leaving the player. A correction is being tested. Do not treat the decoded-frame counters below as proof that the picture is visible. Please postpone updating a working installation until the corrected build is available.
+>
+> **Regresión visual conocida:** algunos canales y vídeos muestran pantalla negra con audio. Se está comprobando la corrección antes de publicar otra versión.
+
 # OuyaLibre 0.8.1 alpha — OUYA / Android 4.1
 
 [Download APK / Descargar APK](https://github.com/emanueloutn/ouya-libre/releases/tag/v0.8.1-alpha) · [Ko-fi](https://ko-fi.com/enmanuelyepez) · [PayPal](https://paypal.me/EnmanuelFYepez)
