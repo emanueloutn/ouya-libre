@@ -6,3 +6,7 @@ signing/
 local.properties
 .env
 .DS_Store
+
+native/
+third-party/*.tar.gz
+*.apk

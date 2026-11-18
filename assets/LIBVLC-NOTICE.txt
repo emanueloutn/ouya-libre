@@ -1,0 +1,10 @@
+OuyaLibre bundles the LibVLC engine from the official VideoLAN VLC Android 3.0.13 ARMv7 release (2018), for Android 4.1 compatibility. This is a library embedded in OuyaLibre; no VLC application is required.
+
+VideoLAN and VLC authors retain their copyrights. LibVLC and Android bindings are LGPL 2.1 or later; see LIBVLC-LGPL-2.1.txt. Original Java copyright notices are preserved. Local Java changes: removal of compile-time support annotations, replacement of support LongSparseArray with the Android API16 implementation. Native codec binaries are unchanged. libjniloader.so is replaced by the small MIT standalone JNI bootstrap in third-party/libvlc-loader/loader.c to omit the unused media-library module. Keep these notices and upstream licenses when distributing.
+
+Original binaries and matching sources:
+https://download.videolan.org/pub/videolan/vlc-android/3.0.13/
+APK SHA256 feadcdf97f6e6f18defa78d05950d80b82674dda3be7a274b7edec3bd1f19193
+Sources SHA256 f8c1b0b05474ff5b100c9d01b11b9e7051cec1f0bcc38ee087f4a7e37e48f9ab
+
+The matching upstream source archive is included alongside the app source in third-party. Rebuild the engine using upstream compile-libvlc.sh and replace native/lib/armeabi-v7a libraries; rebuild OuyaLibre with build.ps1. You may modify/relink these LGPL components and reverse engineer this app for debugging modifications to them. The maintainers' signing key is not required to build and install a separately signed copy. The app's own code retains its MIT license. The separate VLC application's GPL UI/code is not included.

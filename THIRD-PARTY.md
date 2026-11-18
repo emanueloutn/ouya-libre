@@ -7,3 +7,8 @@ Certificados Mozilla: descargados de [curl CA Extract](https://curl.se/docs/caex
 Android JSON, MediaPlayer, VideoView y demás componentes del sistema se utilizan mediante las API de Android y no se redistribuyen como dependencias de la APK.
 
 Jar Jar y el archivo JSON para pruebas JVM solo se utilizaron como herramientas de construcción o de pruebas. No se incluyen como componentes ejecutables de la APK.
+
+
+## Bundled LibVLC
+
+See third-party/LIBVLC-NOTICE.txt and LIBVLC-LGPL-2.1.txt. Matching upstream sources and locally adapted Android bindings are included in third-party/.

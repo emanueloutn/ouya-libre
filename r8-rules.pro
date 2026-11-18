@@ -10,3 +10,5 @@
 -dontwarn javax.net.ssl.X509ExtendedKeyManager
 -dontwarn java.lang.invoke.**
 -dontwarn java.lang.ClassValue
+
+-keep class org.videolan.libvlc.** { *; }
