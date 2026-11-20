@@ -174,5 +174,6 @@
   "Idioma sin confirmar": "Language unconfirmed",
   "Reproducción directa": "Direct playback",
   "Modo alternativo": "Alternate mode",
-  "Modo recomendado": "Recommended mode"
+  "Modo recomendado": "Recommended mode",
+  "La señal se interrumpió. Reintentando…": "The stream was interrupted. Retrying…"
 }
