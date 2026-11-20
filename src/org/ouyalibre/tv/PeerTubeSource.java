@@ -8,7 +8,7 @@ public final class PeerTubeSource implements PagedSource {
  public String name(){return "PeerTube · "+base.replace("https://","").replace("http://","");}
  public List<Item> search(String query)throws Exception{return search(query,1);}
  public List<Item> search(String query,int page)throws Exception{
-  JSONArray a=new JSONObject(Net.text(base+"/api/v1/search/videos?search="+Net.enc(query)+"&count=40&start="+((Math.max(1,page)-1)*40)+"&nsfw=false")).getJSONArray("data");List<Item> out=new ArrayList<Item>();
+  JSONArray a=new JSONObject(Net.text(base+"/api/v1/search/videos?search="+Net.enc(SearchQuery.title(query))+"&count=40&start="+((Math.max(1,page)-1)*40)+"&nsfw=false")).getJSONArray("data");List<Item> out=new ArrayList<Item>();
   for(int i=0;i<a.length();i++){JSONObject j=a.getJSONObject(i);if(j.optBoolean("nsfw"))continue;JSONObject lang=j.optJSONObject("language");String l=lang==null?"":lang.optString("id","");out.add(new Item(name(),j.getString("uuid"),j.optString("name"),j.optString("description"),l,base));}return out;
  }
  public List<Stream> resolve(Item item)throws Exception{

@@ -1,21 +1,30 @@
-## OuyaLibre 0.8.2 alpha — black-video correction and IPTV recovery
+## OuyaLibre 0.9.1 alpha — búsqueda ampliada y archivos públicos de Drive
 
-Download **OuyaLibre-0.8.2.apk** and install over the existing app without uninstalling to retain playlists, favorites and history. OUYA / Android 4.1 ARMv7; no external VLC app or always-on PC required.
+**OUYA / Android 4.1 / ARMv7.** Descarga **OuyaLibre-0.9.1.apk** e instálala encima de la versión anterior, sin desinstalar, para conservar listas M3U, favoritos e historial. Funciona en la consola sin PC encendida ni VLC externo.
 
-**Fixes the confirmed visual regression in 0.8.1:** an uninitialized subtitle surface could cover the video while audio continued, briefly revealing the picture on exit. The subtitle surface is now explicitly cleared to transparency at creation and resize and starts at a minimal size. Hardware decoding remains enabled; no external VLC application is required.
+### Novedades
 
-Verified visually on a real OUYA with Discovery and a real 1080p video opened through the app's history/source selector. The user confirmed the picture was visible without pressing Back. Decoded-frame counters alone were not used as proof of visible playback.
+- Abre archivos públicos individuales de Google Drive mediante **Abrir enlace público**. Conserva la clave de recurso del enlace y acepta MP4/M4V/3GP entregados sin sesión. No utiliza cuenta de Google, claves API, servicios de pago ni servidor propio.
+- Reconoce enlaces de Drive encontrados en la web. Añade una búsqueda de enlaces indexados mediante Bing, activable/desactivable en **Ajustes → Motores de búsqueda → Google Drive**.
+- Incluye las mejoras de búsqueda de 0.9.0: SepiaSearch para descubrir vídeos en distintos servidores PeerTube, consultas alternativas acotadas, hasta 24 candidatos comprobados por fuente/página y validación alternada entre fuentes.
+- Corrige la deduplicación que agrupaba vídeos distintos del mismo servidor PeerTube.
+- La comprobación HLS prueba alternativas y segmentos actuales en directo, y respeta la URL final del manifiesto para sus enlaces relativos.
 
-An A&E observation also ended after a missing HLS fragment (HTTP 404), although the server's live playlist later kept updating. Previously the player stayed at “The stream ended.”
+### Límites claros
 
-This update retries unexpectedly ended **live IPTV HLS** sessions after 5 and 10 seconds, with a maximum of two automatic retries. A notice remains visible. Leaving the player cancels queued retries; channel hiding and original M3U files are unchanged. Movie/VOD playback is unaffected.
+**Drive no admite carpetas en esta versión.** Se rechazan páginas que requieren sesión, permisos, confirmación o cuyo acceso está limitado. Se reproduce el archivo original: no se convierte vídeo ni se garantiza cualquier códec/resolución. La búsqueda depende de enlaces publicados e indexados y del acceso a los buscadores; no es una búsqueda de todo Drive. No se confirmó ningún resultado nuevo de Drive para «Indiana Jones latino».
 
-Real encoded TS media served locally was used to verify reconnection, the two-attempt limit, visible recovery controls and cancellation on exit. No simulated search results or bundled channel lists were added.
+No se ha integrado un puente SearXNG. Google puede exigir una comprobación de acceso; Brave/DuckDuckGo y otros servicios pueden limitar solicitudes. La disponibilidad de una página no confirma que contenga la película completa ni su doblaje.
 
-**Still experimental:** this does not guarantee compatibility with every channel or fix Bluetooth/Wi-Fi interruptions, missing server fragments or all decoder faults. Hardware playback, Spanish/English UI, volume and auto-hiding controls from 0.8.1 are retained.
+### Verificación en una OUYA real
 
-**Español:** corrige la capa de subtítulos que tapaba la imagen en vídeos e IPTV de 0.8.1. La imagen se comprobó visualmente y el usuario confirmó la corrección. También añade hasta dos reintentos si termina una señal IPTV HLS; al salir se cancelan. Actualiza sin desinstalar para conservar tus datos.
+- Drive: **19 comprobaciones** de enlaces, resourcekey, filtrado, acceso público real, rechazo de sesión/confirmación y transferencia por rangos.
+- Reproductor: **7 comprobaciones** con un MP4 público de demostración; reproducción en el motor incorporado, avance, imagen real, audio decodificado, salto de posición y conservación de las listas IPTV. Se observaron 195 fotogramas y 768 bloques de audio decodificados durante una prueba breve; no equivale a una prueba auditiva prolongada de Bluetooth.
+- Búsqueda: «Big Buck Bunny» produjo 43 enlaces comprobados en dos minutos entre Archive, OK.ru y varios servidores PeerTube. Son enlaces/versiones/extractos del mismo título, no 43 películas distintas. «Dexter latino» no produjo episodios verificables de la serie en español en las fuentes probadas.
+- El código del motor de vídeo y PlayerActivity conserva exactamente los hashes de 0.8.2; se mantienen la corrección de imagen negra y los reintentos de HLS en directo.
 
-Complete source and bundled dependencies: **OuyaLibre-0.8.2-source.zip**. Verify downloads using **SHA256SUMS**. Repository builds use the unchanged verified LibVLC kit from v0.8.1-alpha. Own code: MIT; dependencies retain their licenses.
+**English:** adds anonymous individual Google Drive file playback and indexed-link discovery, plus bounded search expansion/global PeerTube discovery from 0.9.0. Drive folders are not supported. No account, paid API or always-on PC is required. Real OUYA checks covered media bytes, access rejection, range requests, native picture/audio decoding and seeking; search coverage remains dependent on public sources and search-engine access. Install over the previous app to retain local data.
+
+**Assets:** APK, complete source/dependency ZIP and **SHA256SUMS**. Own code MIT; dependency licenses retained. Private signing keys, user playlists, account data and test video files are not distributed.
 
 Apoyo voluntario / Support: [Ko-fi](https://ko-fi.com/enmanuelyepez) · [PayPal](https://paypal.me/EnmanuelFYepez).

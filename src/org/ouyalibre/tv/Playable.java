@@ -15,13 +15,14 @@ public final class Playable {
  }
  static boolean probe(String raw,int depth)throws Exception{
   HttpURLConnection c=Net.open(raw,"bytes=0-8191");
-  try{c.setReadTimeout(10000);InputStream in=c.getInputStream();ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] b=new byte[2048];int n;
-   while(out.size()<8192&&(n=in.read(b,0,Math.min(b.length,8192-out.size())))>0){if(Thread.currentThread().isInterrupted())throw new InterruptedIOException("Comprobación cancelada");out.write(b,0,n);}
+  try{c.setReadTimeout(Net.boundedTimeout(10000));InputStream in=c.getInputStream();ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] b=new byte[2048];int n;
+   while(out.size()<8192&&(n=in.read(b,0,Math.min(b.length,8192-out.size())))>0){Net.checkBudget();out.write(b,0,n);}
    byte[] data=out.toByteArray();if(data.length<8)return false;
    String text=new String(data,"UTF-8").trim();
    if(text.startsWith("#EXTM3U")){
     if(depth>2||text.contains("SAMPLE-AES")||text.contains("KEYFORMAT="))return false;
-    for(String line:text.split("\\r?\\n")){line=line.trim();if(line.length()>0&&!line.startsWith("#"))return probe(new URL(new URL(raw),line).toString(),depth+1);}return false;
+    List<String> links=new ArrayList<String>();boolean allowed=true;for(String line:text.split("\\r?\\n")){line=line.trim();if(line.startsWith("#EXT-X-STREAM-INF:")){java.util.regex.Matcher size=java.util.regex.Pattern.compile("RESOLUTION=[0-9]+x([0-9]+)").matcher(line);allowed=!size.find()||Integer.parseInt(size.group(1))<=1080;}else if(line.length()>0&&!line.startsWith("#")){if(allowed)links.add(line);allowed=true;}}
+    boolean live=text.contains("#EXTINF:")&&!text.contains("#EXT-X-ENDLIST");for(int i=0;i<Math.min(2,links.size());i++){String link=links.get(live?links.size()-1-i:i);try{if(probe(new URL(c.getURL(),link).toString(),depth+1))return true;}catch(InterruptedIOException e){throw e;}catch(Exception ignored){}}return false;
    }
    if(text.startsWith("<")||text.startsWith("{")||text.startsWith("["))return false;
    // ISO BMFF/MP4 and MPEG TS. A media probe cannot certify every codec/profile.

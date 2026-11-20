@@ -1,8 +1,19 @@
-# OuyaLibre 0.8.2 alpha — OUYA / Android 4.1
+# OuyaLibre 0.9.1 alpha — OUYA / Android 4.1
 
-[Download APK / Descargar APK](https://github.com/emanueloutn/ouya-libre/releases/tag/v0.8.2-alpha) · [Ko-fi](https://ko-fi.com/enmanuelyepez) · [PayPal](https://paypal.me/EnmanuelFYepez)
+[Download APK / Descargar APK](https://github.com/emanueloutn/ouya-libre/releases/tag/v0.9.1-alpha) · [Ko-fi](https://ko-fi.com/enmanuelyepez) · [PayPal](https://paypal.me/EnmanuelFYepez)
 
 Free native video player and public-source search app for OUYA, Android 4.1 / API 16 and ARMv7. Runs on the console without an always-on PC. No app advertising, subscriptions, Google Play Services or external VLC installation required.
+
+## New in 0.9.1 / Novedades
+
+- **Public Google Drive files:** open an individual public MP4/M4V/3GP file through **Open public link / Abrir enlace público**. Resource keys supplied in the shared link are retained. Login, access limits and confirmation pages are rejected. No Google account, API key, paid service or PC server is required. Folder listings are **not supported**. Playback uses the original file, whose codec/resolution may exceed OUYA capabilities.
+- **Indexed Drive links:** a configurable Google Drive source searches public links via Bing. Ordinary web results may also include Drive files, which were previously filtered out by a Google-domain rule. This is not a global Drive catalog and does not guarantee new film results. Toggle it under **Settings → Search engines → Google Drive**.
+- **Search expansion from 0.9.0:** global PeerTube discovery through SepiaSearch, up to two bounded literal query variants, up to 24 media candidates checked per source/page, fair validation scheduling, and distinct IDs for videos hosted on the same PeerTube server. Explicit Spanish/Latino queries require Spanish indicated in title/metadata; this does not verify Latin American dubbing.
+- **HLS checks:** try up to two eligible alternatives, use current live segments and resolve relative links against the redirected manifest URL.
+
+**Español:** añade archivos públicos individuales de Drive, conserva el resourcekey del enlace y comprueba acceso sin sesión. Puedes pegar el enlace en **Abrir enlace público**. No lista carpetas. Amplía las consultas e incorpora búsqueda global de PeerTube; no promete encontrar todas las películas ni sustituye la cobertura de Google.
+
+The video engine and PlayerActivity are byte-for-byte unchanged from the corrected 0.8.2 implementation. The subtitle-surface fix and bounded live-HLS recovery below are retained.
 
 ## Live HLS recovery in 0.8.2
 
@@ -27,7 +38,7 @@ The failure was reproduced on a real OUYA, with decoded/displayed counters advan
 
 ## Install / Actualizar
 
-Download `OuyaLibre-0.8.2.apk` from Releases and check `SHA256SUMS`. Install it over the previous OuyaLibre version using the same package/signature; do not uninstall first if you want to retain local data. The app appears in **MAKE → Software**.
+Download `OuyaLibre-0.9.1.apk` from Releases and check `SHA256SUMS`. Install it over the previous OuyaLibre version using the same package/signature; do not uninstall first if you want to retain local data. The app appears in **MAKE → Software**.
 
 Descarga el APK de Releases e instálalo encima de la versión anterior. Conserva las listas, favoritos e historial. No incluye listas IPTV: importa tus propios archivos o enlaces en **TV / IPTV**.
 

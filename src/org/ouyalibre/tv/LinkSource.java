@@ -10,6 +10,7 @@ public final class LinkSource implements Source {
  private List<Stream> resolve(Item i,int depth,Set<String> visited)throws Exception{
   if(Thread.currentThread().isInterrupted())throw new java.io.InterruptedIOException("Resolución cancelada");
   if(!visited.add(i.url)||depth>2)throw new Exception("El vídeo embebido no contiene una fuente directa compatible");
+  if(DriveSource.accepts(i.url))return new DriveSource().resolve(i);
   if(OkSource.accepts(i.url))return new OkSource().resolve(i);
   String raw=i.url;Net.safe(raw);String path=new URL(raw).getPath().toLowerCase(Locale.US);
   if(path.endsWith(".mp4")||path.endsWith(".m4v")||path.endsWith(".m3u8")||path.endsWith(".3gp"))return Collections.singletonList(new Stream("Reproducción directa",raw));

@@ -7,7 +7,7 @@ public final class RtvcSource implements PagedSource {
  public String name(){return "RTVCPlay · español";}
  public List<Item> search(String query)throws Exception{return search(query,1);}
  public List<Item> search(String query,int page)throws Exception{
-  JSONObject j=new JSONObject(Net.text("https://cms.rtvcplay.co/api/v1/search?key="+Net.enc(query)+"&page="+(Math.max(1,page)-1)+"&page_size=40&_format=json"));List<Item> out=new ArrayList<Item>();JSONArray widgets=j.optJSONArray("widgets");
+  JSONObject j=new JSONObject(Net.text("https://cms.rtvcplay.co/api/v1/search?key="+Net.enc(SearchQuery.title(query))+"&page="+(Math.max(1,page)-1)+"&page_size=40&_format=json"));List<Item> out=new ArrayList<Item>();JSONArray widgets=j.optJSONArray("widgets");
   if(widgets!=null)for(int w=0;w<widgets.length();w++){JSONArray a=widgets.getJSONObject(w).optJSONArray("contents");if(a==null)continue;for(int i=0;i<a.length()&&out.size()<80;i++){JSONObject v=a.getJSONObject(i);if(v.optInt("chapters_videos",0)==0&&!v.optString("content_type").equals("video"))continue;String slug=v.optString("slug");if(!slug.startsWith("/"))continue;out.add(new Item(name(),slug,v.optString("title"),v.optString("category")+"\n"+v.optString("micro_synopsis"),"es", "https://www.rtvcplay.co"+slug));}}
   return out;
  }

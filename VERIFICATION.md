@@ -1,4 +1,8 @@
-# OuyaLibre 0.8.2 verification
+# OuyaLibre 0.9.1 verification
+
+Current update: 19 Drive parsing/access/range checks and 7 real native playback checks passed on OUYA. A publicly linked RGUKT MP4 was used without session or credentials; native playback advanced, displayed 195 frames, decoded 768 audio buffers and sought successfully. IPTV list count was preserved. No test media or user data are included. Search coverage and Drive folder limitations are documented in RELEASE-NOTES.md.
+
+## Retained 0.8.2 verification
 
 Corrects the 0.8.1 subtitle-surface visual regression and adds bounded live-HLS EOF recovery.
 

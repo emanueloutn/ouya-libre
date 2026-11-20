@@ -11,9 +11,11 @@ public final class OkSource implements PagedSource {
  public static boolean accepts(String raw){try{java.net.URL u=Net.safe(raw);String h=u.getHost().toLowerCase(Locale.US);return (h.equals("ok.ru")||h.equals("www.ok.ru")||h.equals("m.ok.ru"))&&u.getPath().matches("/video(?:embed)?/[0-9]+/?");}catch(Exception e){return false;}}
  public List<Item> search(String q)throws Exception{return search(q,1);}
  public List<Item> search(String q,int page)throws Exception{
-  if(page<1||page>3)return Collections.emptyList();
+  if(page<1||page>4)return Collections.emptyList();List<Item> merged=new ArrayList<Item>();Set<String> seen=new HashSet<String>();for(String variant:SearchQuery.catalogVariants(q)){try{for(Item item:searchOne(variant))if(seen.add(item.id))merged.add(item);}catch(Exception e){if(merged.isEmpty())throw e;break;}}int first=(page-1)*16;return first>=merged.size()?Collections.<Item>emptyList():new ArrayList<Item>(merged.subList(first,Math.min(first+16,merged.size())));
+ }
+ private List<Item> searchOne(String q)throws Exception{
   final String query=q;List<Item> all=payload("https://ok.ru/video/search?st.cmd=anonymVideo&st.ft=search&st.m=SEARCH&st.gsq="+Net.enc(q),new Parser<List<Item>>(){public List<Item> parse(String html)throws Exception{return parseSearch(html,query);}});
-  int start=(page-1)*12;return start>=all.size()?Collections.<Item>emptyList():new ArrayList<Item>(all.subList(start,Math.min(start+12,all.size())));
+  return all;
  }
  static List<Item> parseSearch(String html,String query)throws Exception{
   List<Item> out=new ArrayList<Item>();Matcher m=Pattern.compile("data-props=\"([^\"]+)\"").matcher(html);boolean found=false;
@@ -34,7 +36,7 @@ public final class OkSource implements PagedSource {
   Collections.sort(out,new Comparator<Item>(){public int compare(Item a,Item b){return Boolean.valueOf(b.language.contains("latino")).compareTo(Boolean.valueOf(a.language.contains("latino")));}});return out;
  }
  static String normalize(String s){return java.text.Normalizer.normalize(s.toLowerCase(Locale.US),java.text.Normalizer.Form.NFD).replaceAll("\\p{M}","").replaceAll("[^a-z0-9]+"," ").trim();}
- static boolean matches(String title,String query){String t=" "+normalize(title)+" ";int words=0,hits=0;for(String w:normalize(query).split(" +")){if(w.length()<2||Arrays.asList("el","la","de","en","un","al","los","las","del","por","para","con","una","ver","online","pelicula","peliculas","completa","latino","espanol","gratis","audio","serie","series").contains(w))continue;words++;if(t.contains(" "+w+" "))hits++;}return words==0?t.contains(" "+normalize(query)+" "):hits==words;}
+ static boolean matches(String title,String query){return SearchQuery.matches(title,query);}
  static String language(String title){String t=normalize(title);return t.contains("latino")?"Español latino (según título)":t.contains("subtit")||t.contains("vose")?"Subtitulado (según título)":t.contains("espanol")||t.contains("castellano")?"Español (según título)":"";}
  public List<Stream> resolve(Item item)throws Exception{
   if(!accepts(item.url))throw new Exception("Enlace de OK.ru no reconocido");
@@ -45,7 +47,7 @@ public final class OkSource implements PagedSource {
  static <T>T payload(String url,Parser<T> parser)throws Exception{
   java.net.HttpURLConnection c=Net.open(url,null);java.io.ByteArrayOutputStream out=new java.io.ByteArrayOutputStream();
   try{java.io.InputStream in=c.getInputStream();byte[] b=new byte[8192];int n,next=32768;
-   while((n=in.read(b))!=-1){if(Thread.currentThread().isInterrupted())throw new java.io.InterruptedIOException("Lectura cancelada");if(out.size()+n>4*1024*1024)throw new java.io.IOException("Página demasiado grande");out.write(b,0,n);
+   while((n=in.read(b))!=-1){Net.checkBudget();if(out.size()+n>4*1024*1024)throw new java.io.IOException("Página demasiado grande");out.write(b,0,n);
     if(out.size()>=next){next=out.size()+16384;try{return parser.parse(out.toString("UTF-8"));}catch(Exception incomplete){}}
    }return parser.parse(out.toString("UTF-8"));
   }catch(java.io.EOFException cut){return parser.parse(out.toString("UTF-8"));}finally{c.disconnect();}

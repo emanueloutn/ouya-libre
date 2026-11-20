@@ -7,7 +7,7 @@ public final class ArchiveSource implements PagedSource {
  public List<Item> search(String query)throws Exception{return search(query,1);}
  public List<Item> search(String query,int page)throws Exception{
   // Literal terms prevent user input from injecting search operators.
-  String clean=query.replaceAll("[^\\p{L}\\p{N} \\-]"," ").trim();
+  String clean=SearchQuery.title(query).replaceAll("[^\\p{L}\\p{N} \\-]"," ").trim();
   StringBuilder words=new StringBuilder();for(String term:clean.split(" +")){if(term.length()==0)continue;if(words.length()>0)words.append(" AND ");words.append("\"").append(term).append("\"");}
   String q="mediatype:movies AND ("+words+") AND -access-restricted-item:true";
   String url="https://archive.org/advancedsearch.php?q="+Net.enc(q)+"&fl[]=identifier&fl[]=title&fl[]=description&fl[]=language&rows=40&page="+Math.max(1,page)+"&output=json";

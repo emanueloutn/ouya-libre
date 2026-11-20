@@ -175,5 +175,13 @@
   "Reproducción directa": "Direct playback",
   "Modo alternativo": "Alternate mode",
   "Modo recomendado": "Recommended mode",
-  "La señal se interrumpió. Reintentando…": "The stream was interrupted. Retrying…"
+  "La señal se interrumpió. Reintentando…": "The stream was interrupted. Retrying…",
+  "Encontrado en el índice global de PeerTube; se comprueba el servidor de origen.": "Found in the global PeerTube index; the origin server is checked.",
+  "Consulta adicional no disponible: ": "Additional query unavailable: ",
+  " consultas públicas": " public queries",
+  " candidatos comprobados de ": " candidates checked out of ",
+  " recibidos (máximo 24 por fuente y página).": " received (up to 24 per source and page).",
+  "No hay más páginas disponibles en esta fuente": "No more pages available from this source",
+  "Drive no entrega un MP4 público directo: puede requerir sesión, permisos, confirmación o tener un límite de acceso.": "Drive is not serving a direct public MP4: sign-in, permissions, confirmation or an access limit may apply.",
+  "Drive · archivo original (calidad según el archivo)": "Drive · original file (quality depends on the file)"
 }

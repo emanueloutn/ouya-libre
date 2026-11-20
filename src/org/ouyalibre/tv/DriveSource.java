@@ -1,0 +1,17 @@
+package org.ouyalibre.tv;
+import java.net.*;import java.io.*;import java.util.*;import java.util.regex.*;
+/** Anonymous public file links only. No cookies, credentials, confirmation forms or API keys. */
+public final class DriveSource implements PagedSource {
+ public String name(){return "Google Drive · enlaces públicos (Bing)";}
+ public List<Item> search(String query)throws Exception{return search(query,1);}
+ public List<Item> search(String query,int page)throws Exception{return new WebSource("Bing","drive.google.com").search(query,page);}
+ static boolean host(String h){return h.equalsIgnoreCase("drive.google.com")||h.equalsIgnoreCase("docs.google.com")||h.equalsIgnoreCase("drive.usercontent.google.com");}
+ static String parameter(URL u,String name)throws Exception{String q=u.getQuery();String found=null;if(q!=null)for(String p:q.split("&")){int eq=p.indexOf('=');if(eq>=0&&URLDecoder.decode(p.substring(0,eq),"UTF-8").equals(name)){if(found!=null)throw new IOException("Parámetro duplicado en el enlace de Drive");found=URLDecoder.decode(p.substring(eq+1),"UTF-8");}}return found==null?"":found;}
+ static String id(String raw)throws Exception{URL u=Net.safe(raw);if(!host(u.getHost())||(u.getPort()!=-1&&u.getPort()!=443))throw new IOException("Enlace de Google Drive no reconocido");String path=u.getPath(),id="";Matcher m=Pattern.compile("^/file/d/([A-Za-z0-9_-]{10,200})(?:/(?:view|preview|edit))?/?$").matcher(path);if(m.matches())id=m.group(1);else if(path.equals("/open")||path.equals("/uc")||path.equals("/download"))id=parameter(u,"id");if(!id.matches("[A-Za-z0-9_-]{10,200}"))throw new IOException("Se requiere el enlace público de un archivo de Drive; las carpetas no se admiten todavía");return id;}
+ public static boolean accepts(String raw){try{id(raw);resourceKey(raw);return true;}catch(Exception e){return false;}}
+ static String resourceKey(String raw)throws Exception{String key=parameter(Net.safe(raw),"resourcekey");if(key.length()>200||!key.matches("[A-Za-z0-9_-]*"))throw new IOException("Clave de recurso de Drive no válida");return key;}
+ static String canonical(String raw)throws Exception{String key=resourceKey(raw);return "https://drive.google.com/file/d/"+id(raw)+"/view"+(key.length()==0?"":"?resourcekey="+Net.enc(key));}
+ static String download(String raw)throws Exception{String key=resourceKey(raw);return "https://drive.google.com/uc?export=download&id="+Net.enc(id(raw))+(key.length()==0?"":"&resourcekey="+Net.enc(key));}
+ static boolean mediaResponse(URL end,String type,String disposition){if(!end.getProtocol().equals("https")||!end.getHost().equalsIgnoreCase("drive.usercontent.google.com"))return false;String t=type==null?"":type.toLowerCase(Locale.US).split(";")[0].trim();if(t.equals("video/mp4")||t.equals("video/x-m4v")||t.equals("video/3gpp"))return true;return t.equals("application/octet-stream")&&disposition!=null&&Pattern.compile("(?i)filename(?:\\*|)\\s*=.*\\.(?:mp4|m4v|3gp)(?:[\"';\\s]|$)").matcher(disposition).find();}
+ public List<Stream> resolve(Item item)throws Exception{String url=download(item.url);HttpURLConnection c=Net.open(url,"bytes=0-8191");try{if(!mediaResponse(c.getURL(),c.getContentType(),c.getHeaderField("Content-Disposition")))throw new IOException(Texts.get("Drive no entrega un MP4 público directo: puede requerir sesión, permisos, confirmación o tener un límite de acceso."));return Collections.singletonList(new Stream(Texts.get("Drive · archivo original (calidad según el archivo)"),url));}finally{c.disconnect();}}
+}

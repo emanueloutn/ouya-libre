@@ -8,6 +8,11 @@ import javax.net.ssl.*;
 import java.util.*;
 
 public final class Net {
+ private static final ThreadLocal<Long> probeDeadline=new ThreadLocal<Long>();
+ public static void beginProbeBudget(){probeDeadline.set(System.nanoTime()+12000000000L);}
+ public static void endProbeBudget(){probeDeadline.remove();}
+ public static void checkBudget()throws IOException{if(Thread.currentThread().isInterrupted())throw new InterruptedIOException("Solicitud cancelada");Long end=probeDeadline.get();if(end!=null&&System.nanoTime()>=end.longValue())throw new SocketTimeoutException("Tiempo de comprobación agotado");}
+ public static int boundedTimeout(int normal)throws IOException{checkBudget();Long end=probeDeadline.get();if(end==null)return normal;long remaining=(end.longValue()-System.nanoTime())/1000000L;return (int)Math.max(1,Math.min(normal,remaining/2));}
  private static SSLSocketFactory factory;
  private static volatile X509TrustManager trustManager;
  private static volatile java.util.concurrent.CountDownLatch ready;
@@ -33,14 +38,14 @@ public final class Net {
   if(u.getUserInfo()!=null)throw new IOException("No se admiten credenciales en el enlace");return u;
  }
  public static HttpURLConnection open(String raw,String range)throws Exception{
-  if(Thread.currentThread().isInterrupted())throw new InterruptedIOException("Solicitud cancelada");
+  checkBudget();
   java.util.concurrent.CountDownLatch latch=ready;if(latch!=null&&!latch.await(30,java.util.concurrent.TimeUnit.SECONDS))throw new IOException("La configuración de certificados no terminó a tiempo");
   URL u=safe(raw);
   for(int i=0;i<7;i++){
-   if(trustManager==null)init(null);HttpURLConnection c=u.getProtocol().equals("https")?new ModernHttps(u,trustManager):(HttpURLConnection)u.openConnection();c.setConnectTimeout(12000);c.setReadTimeout(20000);c.setInstanceFollowRedirects(false);
+   if(trustManager==null)init(null);HttpURLConnection c=u.getProtocol().equals("https")?new ModernHttps(u,trustManager):(HttpURLConnection)u.openConnection();c.setConnectTimeout(boundedTimeout(12000));c.setReadTimeout(boundedTimeout(20000));c.setInstanceFollowRedirects(false);
    c.setRequestProperty("User-Agent","OuyaLibre/0.1 (public video search)");c.setRequestProperty("Accept-Encoding","identity");if(range!=null)c.setRequestProperty("Range",range);
    if(c instanceof HttpsURLConnection && factory!=null)((HttpsURLConnection)c).setSSLSocketFactory(factory);
-   int status=c.getResponseCode();
+   int status;try{status=c.getResponseCode();checkBudget();}catch(Exception e){c.disconnect();throw e;}
    if(status==301||status==302||status==303||status==307||status==308){String loc=c.getHeaderField("Location");c.disconnect();if(loc==null)throw new IOException("Redirección vacía");u=safe(new URL(u,loc).toString());continue;}
    if(status!=200&&status!=206){c.disconnect();throw new IOException("HTTP "+status+" en "+u.getHost());}
    return c;
@@ -48,7 +53,7 @@ public final class Net {
  }
  public static byte[] bytes(String url,int max)throws Exception{
   HttpURLConnection c=open(url,null);try{InputStream in=c.getInputStream();ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] b=new byte[8192];int n;
-   while((n=in.read(b))!=-1){if(Thread.currentThread().isInterrupted())throw new InterruptedIOException("Lectura cancelada");if(out.size()+n>max)throw new IOException("Respuesta demasiado grande");out.write(b,0,n);}return out.toByteArray();
+   while((n=in.read(b))!=-1){checkBudget();if(out.size()+n>max)throw new IOException("Respuesta demasiado grande");out.write(b,0,n);}return out.toByteArray();
   }finally{c.disconnect();}
  }
  public static String text(String url)throws Exception{return new String(bytes(url,4*1024*1024),"UTF-8");}
